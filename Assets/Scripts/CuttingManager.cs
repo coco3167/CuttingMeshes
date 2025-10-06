@@ -7,10 +7,11 @@ public static class CuttingManager
     public static void CutMesh(Cuttable cuttable, Cutter cutter)
     {
         Mesh meshToCut = cuttable.GetMesh();
+
+        Vector3[] vertices = (Vector3[])meshToCut.vertices.Clone();
+        int[] triangles = (int[]) meshToCut.triangles.Clone();
         
-        Vector3[] vertices = meshToCut.vertices;
-        int[] triangles = meshToCut.triangles;
-        
+        cuttable.transform.TransformPoints(vertices);
         cutter.ResetCutter();
 
         foreach (Vector3 vertice in vertices)
@@ -43,9 +44,6 @@ public static class CuttingManager
                 cutter.CreateNewVertice(triangleVertices[soloVerticeIndex], triangleVertices[(soloVerticeIndex+2)%3]);
             }
         }
-        
-        meshToCut.vertices = vertices;
-        meshToCut.triangles = triangles;
         
         // Create new gameobjects for new meshes
     }
