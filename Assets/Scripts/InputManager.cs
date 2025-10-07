@@ -6,7 +6,6 @@ public class InputManager : MonoBehaviour
 {
     [SerializeField] private InputActionReference interact;
     [SerializeField] private Cutter cutter;
-    [SerializeField] private Cuttable cuttable;
     
     private PlayerInput m_playerInput;
 
@@ -14,19 +13,22 @@ public class InputManager : MonoBehaviour
     {
         m_playerInput = GetComponent<PlayerInput>();
         
-        //m_playerInput.onActionTriggered += OnActionTriggered;
+        m_playerInput.onActionTriggered += OnActionTriggered;
     }
 
     private void OnActionTriggered(InputAction.CallbackContext obj)
     {
-        if (obj.action == interact.action)
+        if (obj.started && obj.action == interact.action)
         {
-            CuttingManager.CutMesh(cuttable, cutter);
+            foreach (Cuttable cuttable in FindObjectsByType<Cuttable>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+            {
+                CuttingManager.CutMesh(cuttable, cutter);
+            }
         }
     }
 
     private void Update()
     {
-        CuttingManager.CutMesh(cuttable, cutter);
+        //CuttingManager.CutMesh(cuttable, cutter);
     }
 }
